@@ -1,6 +1,5 @@
 const { User } = require('../models/factoryModels')
 
-
 const getAllUsers = async ()=> await User.find({})
 
 const getUserById = async(id)=>{
@@ -16,6 +15,9 @@ const getUserById = async(id)=>{
 
 
 const createUser = async (user)=>{
+
+
+
     const newUser = new User(user)
     await newUser.save()
 
