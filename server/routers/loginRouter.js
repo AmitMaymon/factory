@@ -10,7 +10,7 @@ router.post('/', async (req, res) => {
     if(result.Auth == true)
         res.json(result).status(200)
     else
-        res.json({message:'Error'}).status(401)
+        res.json(result).status(401)
 })
 
 

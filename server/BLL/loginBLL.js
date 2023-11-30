@@ -1,30 +1,40 @@
 const { getWsUsers } = require('../DAL/usersWS')
 const jwt = require('jsonwebtoken')
+const {getUserById} = require('./usersBLL')
 
 
 async function checkLogin(username, email) {
     const users = await getWsUsers()
     const user = users.find((u) => u.username == username && u.email == email)
-    if (!user) return { Auth:false,message: 'Wrong Credentials' }
+    if (!user) return { Auth: false, message: 'Wrong Credentials' }
 
-    const token = generateToken(user)
+    const token = await generateToken(user)
+    console.log(token)
+    if(token == '')return {Auth:false,message:'No user with that ID'}
+    
     return {
-        Auth:true,
+        Auth: true,
         message: 'Successful',
-        token:token 
+        token: token,
+
     }
 
 }
 
-function generateToken(user){
-const secretKey = process.env.SECRET_KEY
+async function generateToken(user) {
+    const dbUser = await getUserById(user.id)
+    console.log(dbUser)
+    if(dbUser['message'] == 'Not Found') return ''
 
-const payload = {
-    // name: user.name
+    const secretKey = process.env.SECRET_KEY
 
-}
+    const payload = {
+        name: user.name,
+        id: user.id
 
-return jwt.sign(payload,secretKey,{expiresIn:'1h'})
+    }
+
+    return jwt.sign(payload, secretKey, { expiresIn: '1h' })
 
 
 }
