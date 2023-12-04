@@ -4,7 +4,11 @@ const { getUserById } = require('../BLL/usersBLL')
 
 //Function to log the actions of the user and to log him out if needed
 async function logActions(req, res, next) {
-
+    
+    if(req.body.loc == 'login'){
+        
+        return next()
+    }
 
     //Activate IF WANT TO NOT LOG GET REQ
     // if (req.method == "GET") {
