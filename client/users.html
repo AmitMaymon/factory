@@ -1,23 +1,93 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="uni.css">
 </head>
+
 <body>
     <span id="welcome"></span>
 
-    <div class="buttons">
-    <h1>Navigaton</h1>
-    <button><a href="./main.html">Main</a></button>
-    <button><a href="./department/department.html">Departments</a></button>
-    <button><a href="./shifts.html">Shifts</a></button>
-    <button><a href="./employee/employee.html">Employees</a></button>
+    <div class="navMenu">
+        <h1>Navigaton</h1>
+        <button><a href="./main.html">Main</a></button>
+        <button><a href="./department/department.html">Departments</a></button>
+        <button><a href="./shifts.html">Shifts</a></button>
+        <button><a href="./employee/employee.html">Employees</a></button>
     </div>
 
     <script src="./globalScripts/welcome.js"></script>
 
+    <div class="mainInfo">
+        <h3>Users Data</h3>
+        <table border=3>
+            <thead>
+                <td>Id</td>
+                <td>Username</td>
+                <td>Max Actions</td>
+                <td>Actions Left</td>
+            </thead>
+            <tbody id="tBody">
+
+            </tbody>
+        </table>
+    </div>
+
+
+    <script>
+
+        async function getData() {
+            let token = localStorage.getItem('token')
+            token = JSON.parse(token)
+            obj={authorization:token.token,loc:'users'}
+            const response = await fetch('http://localhost:7000/users',{
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'authorization': `${token.token}`
+                }
+            })
+            const data = await response.json()
+            const tBody = document.getElementById('tBody')
+            for(let i = 0;i<data.length;i++){
+            let tr = document.createElement('tr')
+
+            let id = document.createElement('td')
+            let fullname = document.createElement('td')
+            let maxA = document.createElement('td')
+            let leftA = document.createElement('td')
+
+
+            id.innerText = data[i].id
+            fullname.innerText = data[i].fullName
+            maxA.innerText = data[i].numOfActions
+            if(data[i].remainingActions == 0){
+                leftA.innerText = 0
+                tr.style.backgroundColor = 'red'
+            }else
+            leftA.innerText = data[i].remainingActions || data[i].numOfActions
+
+            tr.appendChild(id)
+            tr.appendChild(fullname)
+            tr.appendChild(maxA)
+            tr.appendChild(leftA)
+
+            tBody.appendChild(tr)
+
+            }
+            
+            
+
+
+
+
+        }
+        getData()
+
+    </script>
 </body>
+
 </html>

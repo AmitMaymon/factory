@@ -2,7 +2,8 @@ const mongoose = require('mongoose')
 const userSchema = new mongoose.Schema({
     id: { type: Number, required: true, min: 1, unique: true },
     fullName: { type: String, required: true },
-    numOfActions: { type: Number }
+    numOfActions: { type: Number },
+    remainingActions:{type:Number}
 }, { versionKey: false })
 
 const departmentSchema = new mongoose.Schema({

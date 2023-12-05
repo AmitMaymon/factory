@@ -1,6 +1,8 @@
 const { User } = require('../models/factoryModels')
+const jf = require('jsonfile')
 
 const getAllUsers = async ()=> await User.find({})
+
 
 const getUserById = async(id)=>{
     const user = await User.find({id:id})

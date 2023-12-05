@@ -1,6 +1,6 @@
 const jf = require('jsonfile')
 const { getUserById } = require('../BLL/usersBLL')
-
+const {User} = require('../models/factoryModels')
 
 //Function to log the actions of the user and to log him out if needed
 async function logActions(req, res, next) {
@@ -11,10 +11,10 @@ async function logActions(req, res, next) {
     }
 
     //Activate IF WANT TO NOT LOG GET REQ
-    // if (req.method == "GET") {
-    //     next()
-    //     return
-    // }
+    if (req.method == "GET") {
+        next()
+        return
+    }
     newData = []
     try {
         const prevData = await jf.readFile('../server/data/log.json')
@@ -31,8 +31,6 @@ async function logActions(req, res, next) {
     let date = new Date
     
     let currentDate = date.getDate()+'/'+date.getMonth()+'/'+date.getFullYear()
-    console.log(typeof currentDate)
-
     let actionsPerformed = 0
     try {
         for (let i = 0; i < newData.length; i++) {
@@ -63,6 +61,9 @@ async function logActions(req, res, next) {
     }
     newData.push(obj)
     jf.writeFile('../server/data/log.json', newData,{spaces:2})
+
+    await User.findOneAndUpdate({id:id},{"remainingActions":remainingActions})
+
 
     next()
 }

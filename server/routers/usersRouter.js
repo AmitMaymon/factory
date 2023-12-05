@@ -4,6 +4,7 @@ const usersBLL = require('../BLL/usersBLL')
 router = express.Router()
 
 
+
 router.get('/', async (req, res) => {
     try {
         res.json(await usersBLL.getAllUsers()).status(200)

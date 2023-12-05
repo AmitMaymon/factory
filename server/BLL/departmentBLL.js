@@ -7,7 +7,7 @@ const getDepartmentById = async(id)=>{
     const department = await Department.find({id:id})
     
     if(department.length != 0){
-        return {department:department}
+        return department
     }
     return {message:'Not Found'}
 
