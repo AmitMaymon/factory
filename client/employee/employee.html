@@ -6,7 +6,7 @@
     <title>Document</title>
     <link rel="stylesheet" href="../uni.css">
 </head>
-<body>
+<body onload="getEmps()">
 
     <span id="welcome"></span>
 
@@ -22,18 +22,19 @@
 
     <div class="mainInfo">
         <h3>Employee Data</h3>
-        <table border="3">
+        <table border="3" class="main-table">
             <thead>
                 <td>ID</td>
                 <td>Full Name</td>
                 <td>Department ID</td>
                 <td>Department</td>
+                <td>Edit Employee</td>
             </thead>
             <tbody id="tBody"></tbody>
         </table>
     </div>
     <div class="empButton" style="text-align: end;">
-        <button >New employee</button>
+        <button onclick="document.location.href  = './newEmployee.html'">New employee</button>
     </div>
     
 
@@ -50,36 +51,49 @@
                     'authorization': `${token.token}`
                 }
             })
-            if(response.status >= 400) window.location.href = './login.html'
+            if(response.status >= 400) window.location.href = '../login.html'
             const data = await response.json()
-
+            
             const tBody = document.getElementById('tBody')
             for(let i = 0;i<data.length;i++){
             let tr = document.createElement('tr')
+
 
             let id = document.createElement('td')
             let fullname = document.createElement('td')
             let dep = document.createElement('td')
             let depName = document.createElement('td')
+            let btn = document.createElement('button')
 
 
             id.innerText = data[i].id
             fullname.innerText = `${data[i].firstName} ${data[i].lastName}`
-            const response2 = await fetch('http://localhost:7000/departments/'+data[i].id,{
+            const response2 = await fetch(`http://localhost:7000/departments/${data[i].depId}`,{
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
                     'authorization': `${token.token}`
                 }
             })
+            if(response.status >= 400) window.location.href = '../login.html'
             const data2 = await response2.json()
+
             depName.innerText = data2[0].name
             dep.innerText = data[i].depId
+
+            btn.onclick = ()=>{
+                sessionStorage.setItem('tempId',data[i].id)
+                window.location.href='./editEmployee.html'
+            }
+            btn.innerText = 'Edit'
+            btn.className = 'updBtn'
+
     
             tr.appendChild(id)
             tr.appendChild(fullname)
             tr.appendChild(dep)
             tr.appendChild(depName)
+            tr.appendChild(btn)
             
             
             
@@ -90,7 +104,7 @@
             }
 
         }
-        getEmps()
+        
 
 
 

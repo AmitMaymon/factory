@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../uni.css">
+    <title>New Employee</title>
+</head>
+<body>
+
+    <span id="welcome" style="width: 50%;"></span>
+    <table border="3" class="center">
+        <tr>
+            <th>ID</th>
+            <td><input type="text" id="id"></td>
+        </tr>
+        <tr>
+            <th>First Name</th>
+            <td><input type="text" id="fname"></td>
+        </tr>
+        <tr>
+            <th>Last Name</th>
+            <td><input type="text" id="lname"></td>
+        </tr>
+        <tr>
+            <th>Starting date(YYYY)</th>
+            <td><input type="text" id="syear"></td>
+        </tr>
+        <tr>
+            <th>Department ID</th>
+            <td><input type="text" id="depid"></td>
+        </tr>
+        <tr>
+            <th>Shifts</th>
+            <td><input type="text" id="shifts"></td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <button style="width: 100%;" onclick="createEmp()">Create New Employee</button>
+            </td>
+
+        </tr>
+
+    </table>
+    <script src="../globalScripts/welcome.js"></script>
+    <script>
+
+        async function createEmp(){
+            const id = document.getElementById('id').value
+            const fname = document.getElementById('fname').value
+            const lname = document.getElementById('lname').value
+            const syear = document.getElementById('syear').value
+            const depid = document.getElementById('depid').value
+            const shifts = document.getElementById('shifts').value
+            const token = JSON.parse(localStorage.getItem('token'))
+            
+            const obj ={
+                id,
+                firstName:fname,
+                lastName:lname,
+                startYear:syear,
+                depId:depid,
+                shifts:shifts
+            }
+
+
+            const response = await fetch(`http://localhost:7000/employees`,{
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'authorization': `${token.token}`,
+                    "id":`${token.id}`
+                },
+                body:JSON.stringify(obj)
+            })
+            const datas = await response.text()
+            if(response.status == 200){
+                window.location.href = './employee.html'
+                alert('Employee Created!')
+                
+            }else{
+                alert('Creating Faild!')
+            }
+
+        }
+
+
+
+
+    </script>
+
+
+
+</body>
+</html>

@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Employee</title>
+    <link rel="stylesheet" href="../uni.css">
+
+</head>
+<body onload="getData()">
+    <span id="welcome"></span>
+    <table border="3" id="mainTable" class="main-table">
+        <thead>
+            <th>ID</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Starting Year</th>
+            <th>Department ID</th>
+            <th>Shifts</th>
+        </thead>
+        <tr>
+            <td><input type="text" class="full-input" id="id"></td>
+            <td><input type="text" class="full-input" id="fname"></td>
+            <td><input type="text" class="full-input" id="lname"></td>
+            <td><input type="text" class="full-input" id="syear"></td>
+            <td><input type="text" class="full-input" id="depid"></td>
+            <td><input type="text" class="full-input" id="shifts"></td>
+        </tr>
+        
+
+    </table>
+    <button onclick="updateData()">Save Changes</button>
+
+
+
+
+
+
+
+    <script src="../globalScripts/welcome.js"></script>
+    <script>
+
+        async function getData() {
+            let id = parseInt(JSON.parse(sessionStorage.getItem('tempId')))
+            console.log(id)
+            const token = JSON.parse(localStorage.getItem('token'))
+            
+            const response = await fetch('http://localhost:7000/employees/' + id, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'authorization': `${token.token}`
+                }
+            })
+            if (response.status >= 400) window.location.href = '../login.html'
+            const data = await response.json()
+            sortData(data.employee[0])
+
+        }
+    
+        
+
+        function sortData(data){
+            const id = document.getElementById('id')
+            const fname = document.getElementById('fname')
+            const lname = document.getElementById('lname')
+            const syear = document.getElementById('syear')
+            const depid = document.getElementById('depid')
+            const shifts = document.getElementById('shifts')
+
+            id.value = data.id
+            fname.value = data.firstName
+            lname.value = data.lastName
+            syear.value = data.startYear
+            depid.value = data.depId
+            shifts.value = data.shifts
+
+
+
+
+
+            
+        }
+        async function updateData(){
+            const id = document.getElementById('id').value
+            const fname = document.getElementById('fname').value
+            const lname = document.getElementById('lname').value
+            const syear = document.getElementById('syear').value
+            const depid = document.getElementById('depid').value
+            const shifts = document.getElementById('shifts').value
+            const token = JSON.parse(localStorage.getItem('token'))
+            let tempid = parseInt(JSON.parse(sessionStorage.getItem('tempId')))
+            const obj ={
+                id,
+                firstName:fname,
+                lastName:lname,
+                startYear:syear,
+                depId:depid,
+                shifts:shifts
+            }
+
+
+            const response = await fetch(`http://localhost:7000/employees/${tempid}`,{
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'authorization': `${token.token}`,
+                    'id': `${token.id}`
+                },
+                body:JSON.stringify(obj)
+            })
+            const datas = await response.text()
+            if(response.status == 200){
+                window.location.href = './employee.html'
+                alert('Employee Updated')
+                
+            }else{
+                alert('Update failed')
+            }
+
+
+
+
+
+
+
+
+        }
+        
+
+
+    </script>
+</body>
+</html>

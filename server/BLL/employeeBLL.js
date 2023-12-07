@@ -3,8 +3,8 @@ const { Employee } = require('../models/factoryModels')
 
 const getAllEmployees = async ()=> await Employee.find({})
 
-const getemployeeById = async(id)=>{
-    const employee = await employee.find({id:id})
+const getEmployeeById = async(id)=>{
+    const employee = await Employee.find({id:id})
     
     if(employee.length != 0){
         return {employee:employee}
@@ -46,7 +46,7 @@ const deleteEmployee = async (id)=>{
 
 module.exports = {
     getAllEmployees,
-    getemployeeById,
+    getEmployeeById,
     updateEmployee,
     deleteEmployee,
     createEmployee

@@ -23,9 +23,8 @@ async function logActions(req, res, next) {
     } catch (error) {
         console.log('No JSON Data')
     }
-
-    const id = req.body.id
-    console.log(req.body.id)
+    req.he
+    const id = req.headers.id
     const { user } = await getUserById(id)
 
     let date = new Date
@@ -46,7 +45,7 @@ async function logActions(req, res, next) {
 
     const remainingActions = user[0].numOfActions - actionsPerformed - 1
     if(remainingActions<0){
-        return res.json({message:'No More action'})
+        return res.json({message:'No More actions'})
         
     }
 
