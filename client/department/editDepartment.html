@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Department</title>
+    <link rel="stylesheet" href="../uni.css">
+
+</head>
+<body onload="getData()">
+    <span id="welcome"></span>
+    <table border="3" id="mainTable" class="main-table">
+        <thead>
+            <th>ID</th>
+            <th>Department Name</th>
+            <th>Manager ID</th>
+
+        </thead>
+        <tr>
+            <td><input type="text" class="full-input" id="id"></td>
+            <td><input type="text" class="full-input" id="name"></td>
+            <td><input type="text" class="full-input" id="manager"></td>
+
+        </tr>
+        
+
+    </table>
+    <button onclick="updateData()">Save Changes</button>
+
+
+
+
+
+
+
+    <script src="../globalScripts/welcome.js"></script>
+    <script>
+
+        async function getData() {
+            let id = parseInt(JSON.parse(sessionStorage.getItem('tempId')))
+            const token = JSON.parse(localStorage.getItem('token'))
+            
+            const response = await fetch('http://localhost:7000/departments/' + id, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'authorization': `${token.token}`
+                }
+            })
+            if (response.status >= 400) window.location.href = '../login.html'
+            const data = await response.json()
+            console.log(data[0])
+            sortData(data[0])
+
+        }
+    
+        
+
+        function sortData(data){
+            const id = document.getElementById('id')
+            const name = document.getElementById('name')
+            const manager = document.getElementById('manager')
+
+
+            id.value = data.id
+            name.value = data.name
+            manager.value = data.managerId
+            
+
+
+
+
+
+            
+        }
+
+        async function updateData(){
+            const id = document.getElementById('id').value
+            const name = document.getElementById('name').value
+            const manager = document.getElementById('manager').value
+            const token = JSON.parse(localStorage.getItem('token'))
+            let tempid = parseInt(JSON.parse(sessionStorage.getItem('tempId')))
+            const obj ={
+                id,
+                name:name,
+                managerId:manager
+            }
+
+
+            const response = await fetch(`http://localhost:7000/departments/${tempid}`,{
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'authorization': `${token.token}`,
+                    'id': `${token.id}`
+                },
+                body:JSON.stringify(obj)
+            })
+            const data = await response.json()
+            console.log(data)
+            if(response.status == 200){
+                window.location.href = './department.html'
+                alert('Department Updated')
+                
+            }else{
+                window.location.href = './department.html'
+                alert('Update failed')
+            }
+
+
+
+
+
+
+
+
+        }
+        
+
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../uni.css">
+    <title>New Department</title>
+</head>
+<body>
+
+    <span id="welcome" style="width: 50%;"></span>
+    <table border="3" class="center">
+        <tr>
+            <th>ID</th>
+            <td><input type="text" id="id"></td>
+        </tr>
+        <tr>
+            <th>Department Name</th>
+            <td><input type="text" id="name"></td>
+        </tr>
+        <tr>
+            <th>Manager ID</th>
+            <td><input type="text" id="manager"></td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <button style="width: 100%;" onclick="createDep()">Create New Employee</button>
+            </td>
+
+        </tr>
+
+    </table>
+    <script src="../globalScripts/welcome.js"></script>
+    <script>
+
+        async function createDep(){
+            const id = document.getElementById('id').value
+            const name = document.getElementById('name').value
+            const manager = document.getElementById('manager').value
+        
+            const token = JSON.parse(localStorage.getItem('token'))
+            
+            const obj ={
+                id,
+                name:name,
+                managerId:manager
+            }
+
+
+            const response = await fetch(`http://localhost:7000/departments`,{
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'authorization': `${token.token}`,
+                    "id":`${token.id}`
+                },
+                body:JSON.stringify(obj)
+            })
+
+            if(response.status == 200){
+                window.location.href = './department.html'
+                alert('Department Created!')
+                
+            }else{
+                window.location.href = './department.html'
+                alert('Process Faild!')
+            }
+
+        }
+
+
+
+
+    </script>
+
+
+
+</body>
+</html>

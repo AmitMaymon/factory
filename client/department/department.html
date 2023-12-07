@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Departments</title>
+    <link rel="stylesheet" href="../uni.css">
+</head>
+<body onload="getDeps()">
+
+    <span id="welcome"></span>
+
+    <div class="navMenu">
+        <h1>Navigaton</h1>
+        <button><a href="../main.html">Main</a></button>
+        <button><a href="../users.html">Users</a></button>
+        <button disabled><a>Departments</a></button>
+        <button><a href="../shifts.html">Shifts</a></button>
+        <button><a href="../employee/employee.html">Employees</a></button>
+    </div>
+    <script src="../globalScripts/welcome.js"></script>
+
+    <div class="mainInfo">
+        <h3>Department Data</h3>
+        <table border="3" class="main-table">
+            <thead>
+                <td>ID</td>
+                <td>Name</td>
+                <td>Manager ID</td>
+            </thead>
+            <tbody id="tBody"></tbody>
+        </table>
+    </div>
+    <div class="empButton" style="text-align: end;">
+        <button onclick="document.location.href  = './newDepartment.html'">New Department</button>
+    </div>
+    
+
+    <script>
+
+        async function getDeps(){
+            let token = localStorage.getItem('token')
+            token = JSON.parse(token)
+            obj={authorization:token.token,loc:'users'}
+            const response = await fetch('http://localhost:7000/departments',{
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'authorization': `${token.token}`
+                }
+            })
+            if(response.status == 401) window.location.href = '../login.html'
+            const data = await response.json()
+            
+            const tBody = document.getElementById('tBody')
+            for(let i = 0;i<data.length;i++){
+            let tr = document.createElement('tr')
+
+
+            let id = document.createElement('td')
+            let name = document.createElement('td')
+            let manager = document.createElement('td')
+            
+            let btn = document.createElement('button')
+
+
+            id.innerText = data[i].id
+            name.innerText = `${data[i].name}`
+         
+            manager.innerText = data[i].managerId
+
+            btn.onclick = ()=>{
+                sessionStorage.setItem('tempId',data[i].id)
+                window.location.href='./editDepartment.html'
+            }
+            btn.innerText = 'Edit'
+            btn.className = 'updBtn'
+
+    
+            tr.appendChild(id)
+            tr.appendChild(name)
+            tr.appendChild(manager)
+            tr.appendChild(btn)
+            
+            
+            
+
+
+            tBody.appendChild(tr)
+
+            }
+
+        }
+        
+
+
+
+
+    </script>
+
+</body>
+</html>

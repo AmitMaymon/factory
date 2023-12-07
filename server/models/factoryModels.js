@@ -9,9 +9,8 @@ const userSchema = new mongoose.Schema({
 const departmentSchema = new mongoose.Schema({
     id: { type: Number, required: true, min: 1, unique: true },
     name: { type: String, required: true },
-    managerId: { type: Number },
-    username:{type:String},
-    email:{type:String,toLowerCase:true}
+    managerId: { type: Number }
+
 }, { versionKey: false })
 
 const employeeSchema = new mongoose.Schema({

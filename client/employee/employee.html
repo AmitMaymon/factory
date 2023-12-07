@@ -63,6 +63,8 @@
             let fullname = document.createElement('td')
             let dep = document.createElement('td')
             let depName = document.createElement('td')
+            let depNameA = document.createElement('a')
+            
             let btn = document.createElement('button')
 
 
@@ -78,7 +80,11 @@
             if(response.status >= 400) window.location.href = '../login.html'
             const data2 = await response2.json()
 
-            depName.innerText = data2[0].name
+            depNameA.addEventListener('click',()=>{
+                sessionStorage.setItem('tempId',JSON.stringify(data2[0].id))
+            })
+            depNameA.innerText = data2[0].name
+            depNameA.href = '../department/editDepartment.html'
             dep.innerText = data[i].depId
 
             btn.onclick = ()=>{
@@ -88,7 +94,8 @@
             btn.innerText = 'Edit'
             btn.className = 'updBtn'
 
-    
+            depName.appendChild(depNameA)
+            
             tr.appendChild(id)
             tr.appendChild(fullname)
             tr.appendChild(dep)

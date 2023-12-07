@@ -24,7 +24,6 @@ const createDepartment = async (department)=>{
 
 const updateDepartment = async (id,department)=>{
     const departmentTemp = await Department.findOneAndUpdate({id:id},department,{new:true,runValidators:true})
-    console.log(departmentTemp)
     if(departmentTemp!= null){
         return{updated:departmentTemp}
     }else{
