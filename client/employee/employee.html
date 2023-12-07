@@ -12,10 +12,11 @@
 
     <div class="navMenu">
         <h1>Navigaton</h1>
-        <button><a href="./main.html">Main</a></button>
-        <button><a href="./department/department.html">Departments</a></button>
-        <button><a href="./shifts.html">Shifts</a></button>
-        <button><a href="./employee/employee.html">Employees</a></button>
+        <button><a href="../main.html">Main</a></button>
+        <button><a href="../users.html">Users</a></button>
+        <button><a href="../department/department.html">Departments</a></button>
+        <button><a href="../shifts.html">Shifts</a></button>
+        <button disabled><a aria-disabled>Employees</a></button>
     </div>
     <script src="../globalScripts/welcome.js"></script>
 
@@ -49,6 +50,7 @@
                     'authorization': `${token.token}`
                 }
             })
+            if(response.status >= 400) window.location.href = './login.html'
             const data = await response.json()
 
             const tBody = document.getElementById('tBody')

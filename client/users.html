@@ -13,7 +13,8 @@
 
     <div class="navMenu">
         <h1>Navigaton</h1>
-        <button><a href="./main.html">Main</a></button>
+        <button disabled><a href="./main.html">Main</a></button>
+        <button disabled><a aria-disabled >Users</a></button>
         <button><a href="./department/department.html">Departments</a></button>
         <button><a href="./shifts.html">Shifts</a></button>
         <button><a href="./employee/employee.html">Employees</a></button>
@@ -50,6 +51,7 @@
                     'authorization': `${token.token}`
                 }
             })
+            if(response.status >= 400) window.location.href = './login.html'
             const data = await response.json()
             const tBody = document.getElementById('tBody')
             for(let i = 0;i<data.length;i++){

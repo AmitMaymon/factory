@@ -1,4 +1,5 @@
 let info = localStorage.getItem('token')
+
 info = JSON.parse(info)
 const welcome = document.getElementById('welcome')
 const h4 = document.createElement('h4')

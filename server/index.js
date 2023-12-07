@@ -22,7 +22,7 @@ app.use(logActions)
 // app.use(authenticateToken)
 //Paths
 app.use('/users',(req,res,next)=>{authenticateToken(req,res,next);},usersRouter)
-app.use('/employees',employeeRouter)
+app.use('/employees',(req,res,next)=>{authenticateToken(req,res,next);},employeeRouter)
 app.use('/shifts',shiftRouter)
 app.use('/departments',departmentRouter)
 app.use('/login',loginRouter)
